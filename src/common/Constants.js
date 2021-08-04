@@ -1,0 +1,1 @@
+export const SETTINGS_KEY = "my_cinema_settings";
