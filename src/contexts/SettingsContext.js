@@ -24,7 +24,7 @@ const SettingsContext = createContext({
          }
      },[])
      useEffect(()=>{
-         document.dir = settings.direction
+        //  document.dir = settings.direction
      },[settings])
      const saveSettings = (newObject) =>{
         // update

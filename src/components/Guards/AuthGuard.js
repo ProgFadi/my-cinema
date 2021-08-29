@@ -1,16 +1,24 @@
 import React from 'react';
-import useAuth from '../../hooks/useAuth'
-import {Redirect} from 'react-router-dom'
-function AuthGuard({children}) {
-    const {isAuth} = useAuth()
-    if(!isAuth)
-    return <Redirect to="/login"/>
+import { Redirect } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import PropTypes from 'prop-types';
 
-    return (
-        <>
-        {children}
-        </>
-    );
-}
+const AuthGuard = ({ children }) => {
+  const { isAuth } = useAuth();
+console.log('A')
+  if (!isAuth) {
+    return <Redirect to="/Login" />;
+  }
+
+  return (
+    <>
+      {children}
+    </>
+  );
+};
+
+AuthGuard.propTypes = {
+  children: PropTypes.node
+};
 
 export default AuthGuard;

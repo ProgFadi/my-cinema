@@ -1,42 +1,84 @@
 import React from 'react'
-import { Fragment } from 'react'
+import { Fragment ,lazy} from 'react'
 import {Switch,Route} from 'react-router-dom'
-import {ROUTES} from './common/Constants'
-
-
-export const renderRoutes = (props) =>{
-    return  <Switch>
+import {Suspense} from 'react'
+import LoadingScreen from './layouts/Pages/LoadingScreen'
+import AuthGuard from './components/Guards/AuthGuard';
+import GuestGuard from './components/Guards/GuestGuard';
+import ContainerLayout from './layouts/ContainerLayout'
+export const renderRoutes = (routes = []) =>(
+    <Suspense fallback={<LoadingScreen/>}>
+        <Switch>
         {
-            ROUTES.map((route,index)=>{
-                let Guard = route.guard
-                let Comp = route.component
-                console.log(Guard)
+            routes.map((route,index)=>{
+                const Guard = route.guard || Fragment
+                const Component = route.component
+                const Layout = route.layout || Fragment;
+                
+                console.log('routing...')
                 return (
-                    
                     <Route
                     key={index}
                     path={route.path}
                     exact={route.exact}
                     // component={route.component}
-                    render= {
-                        (props)=>(
+                    render= {(props)=>(
                             <Guard>
-                                <Fragment>
-                                <Comp {...props}/>
-                                </Fragment>
-                                
+                                <Layout>
+                                <Component {...props}/>   
+                                </Layout>
+                               
                             </Guard>
                 )
                     }
-                    >
+                    />
 
 
-                    </Route>
-                )
+                );
             })
         }
     </Switch>
-}
+    </Suspense>
+   
+)
+
+const my_routes =  [
+    {
+        guard:AuthGuard,
+        path:"/",
+        exact:true,
+        component:lazy(() => import('./layouts/Pages/Home'))
+    },
+    {
+        guard:GuestGuard,
+        path:"/Login",
+        exact:true,
+        component:lazy(() => import('./layouts/Pages/Login'))
+    },
+    {
+        guard:GuestGuard,
+        path:"/Signup",
+        exact:true,
+        component:lazy(() => import('./layouts/Pages/Signup'))
+    },
+    {
+        guard:AuthGuard,
+        layout:ContainerLayout,
+        path:"/Movie",
+        exact:true,
+        component:lazy(() => import('./layouts/Pages/Movie'))
+    },
+    {
+        guard:AuthGuard,
+        layout:ContainerLayout,
+        path:"/Home",
+        exact:true,
+        component:lazy(() => import('./layouts/Pages/Home'))
+    }
+
+];
+
+export default my_routes
 
 
 

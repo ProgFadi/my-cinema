@@ -1,18 +1,24 @@
 import React from 'react';
-import useAuth from '../../hooks/useAuth'
-import {Redirect} from 'react-router-dom'
-function GuestGuard({children}) {
-    const {isAuth} = useAuth()
-    console.log('is Auth?')
-    console.log(isAuth)
-    if(isAuth)
-    return <Redirect to="/Home"/>
+import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import useAuth from '../../hooks/useAuth';
 
-    return (
-        <>
-        {children}
-        </>
-    );
-}
+const GuestGuard = ({ children }) => {
+  const { isAuth } = useAuth();
+  console.log('G')
+  if (isAuth) {
+    return <Redirect to="/Home" />;
+  }
+
+  return (
+    <>
+      {children}
+    </>
+  );
+};
+
+GuestGuard.propTypes = {
+  children: PropTypes.node
+};
 
 export default GuestGuard;
